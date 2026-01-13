@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <title>Ale</title>
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+    <div class="terminal">
+      <div class="container">
+        <p><b>1 </b> function invitar(nombre) {</p>
+        <p>
+          <b>2 </b><span class="tab-1"></span>const fecha = new Date("7 de
+          Oct.");
+        </p>
+        <p><b>3 </b><span class="tab-1"></span>const lugar = "casa de Ale";</p>
+        <p><b>4 </b><span class="tab-1"></span>const hora = "19:00";</p>
+
+        <p><b>5 </b><span class="tab-1"></span>return `</p>
+        <p>
+          <b>6 </b><span class="tab-2"></span>&lt;h1&gt; Ale cumple 35!
+          &lt;/h1&gt;
+        </p>
+        <p>
+          <b>7 </b><span class="tab-2"></span>&lt;p&gt; y te invita a celebrarlo
+          &lt;/p&gt;
+        </p>
+        <p>
+          <b>8 </b><span class="tab-2"></span>&lt;p&gt; el ${fecha} a la ${hora}
+          &lt;/p&gt;
+        </p>
+        <p>
+          <b>9 </b><span class="tab-2"></span>&lt;p&gt; en ${lugar}. &lt;/p&gt;
+        </p>
+        <p>
+          <b>10</b><span class="tab-2"></span>&lt;h1&gt; ${nombre} no faltes!! &lt;/h1&gt;
+        </p>
+        <p><b>11</b><span class="tab-1"></span>`;</p>
+        <p><b>12</b> }</p>
+        <p><b>13</b></p>
+        <p><b>14</b> invitar("<span id="invitado"></span>");</p>
+      </div>
+    </div>
+    <script>
+      const handleLocation = async () => {
+        const path = window.location.pathname;
+        const invitado = path.slice(12);
+        const elem = document.getElementById("invitado");
+        elem.innerHTML = invitado;
+      };
+      handleLocation();
+    </script>
+  </body>
+</html>
+
+<style>
+  @import url("https://fonts.googleapis.com/css?family=VT323");
+
+  body {
+    min-height: 100dvh;
+    background-color: #000000;
+    background-image: radial-gradient(#11581e, #041607),
+      url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    font-family: "VT323", monospace;
+  }
+  .logo {
+    width: 40%;
+    min-width: 200px;
+    max-width: 600px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -60% -50%;
+  }
+  .logo path {
+    fill: none;
+    stroke-width: 0.5px;
+    stroke: #091d0b;
+    filter: blur(1px);
+  }
+  .terminal {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .terminal .container {
+    min-width: 42ch;
+    font-size: 24px;
+  }
+  .noise {
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    opacity: 0.02;
+  }
+
+  .overlay {
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.3) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    background-size: auto 4px;
+    z-index: 1;
+  }
+
+  .overlay::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(32, 128, 32, 0.2) 2%,
+      rgba(32, 128, 32, 0.8) 3%,
+      rgba(32, 128, 32, 0.2) 3%,
+      transparent 100%
+    );
+    background-repeat: no-repeat;
+    -webkit-animation: scan 7.5s linear 0s infinite;
+    animation: scan 7.5s linear 0s infinite;
+  }
+
+  @-webkit-keyframes scan {
+    0% {
+      background-position: 0 -100vh;
+    }
+    35%,
+    100% {
+      background-position: 0 100vh;
+    }
+  }
+
+  @keyframes scan {
+    0% {
+      background-position: 0 -100vh;
+    }
+    35%,
+    100% {
+      background-position: 0 100vh;
+    }
+  }
+
+  .terminal p {
+    margin: 1px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: type 2.5s steps(60, end) backwards;
+    color: #00c414;
+    max-width: 42ch;
+  }
+  .terminal p:nth-child(1) {
+    animation-delay: 2.5s;
+  }
+  .terminal p:nth-child(2) {
+    animation-delay: 5s;
+  }
+  .terminal p:nth-child(3) {
+    animation-delay: 7.5s;
+  }
+  .terminal p:nth-child(4) {
+    animation-delay: 10s;
+  }
+  .terminal p:nth-child(5) {
+    animation-delay: 12.5s;
+  }
+  .terminal p:nth-child(6) {
+    animation-delay: 15s;
+  }
+  .terminal p:nth-child(7) {
+    animation-delay: 17.5s;
+  }
+  .terminal p:nth-child(8) {
+    animation-delay: 20s;
+  }
+  .terminal p:nth-child(9) {
+    animation-delay: 22.5s;
+  }
+  .terminal p:nth-child(10) {
+    animation-delay: 25s;
+  }
+  .terminal p:nth-child(11) {
+    animation-delay: 27s;
+  }
+  .terminal p:nth-child(12) {
+    animation-delay: 28.5s;
+  }
+  .terminal p:nth-child(13) {
+    animation-delay: 30s;
+  }
+  .terminal p:nth-child(14) {
+    animation-delay: 31.5s;
+  }
+  .terminal p.break {
+    margin: 1px 0 15px 0;
+  }
+  .terminal span.tab-1 {
+    display: inline-block;
+    width: 2ch;
+  }
+  .terminal b {
+    opacity: 0.5;
+  }
+  .terminal span.tab-2 {
+    display: inline-block;
+    width: 4ch;
+  }
+  @keyframes type {
+    from {
+      width: 0ch;
+    }
+    to {
+      width: 42ch;
+    }
+  }
+  #invitado {
+    text-transform: capitalize;
+  }
+  @media screen and (max-width: 520px) {
+    .terminal .container {
+      font-size: 20px;
+    }
+  }
+  @media screen and (max-width: 360px) {
+    .terminal .container {
+      font-size: 18px;
+    }
+  }
+</style>

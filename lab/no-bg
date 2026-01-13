@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" style="background-color: transparent;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No bg test</title>
+</head>
+<body style="background-color: transparent; min-height: 300px;padding: 0;margin: 0;display: grid;place-content: center;" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <h1>No background</h1>
+</body>
+</html>
