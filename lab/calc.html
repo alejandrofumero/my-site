@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Costos Impresión 3D</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--accent);
+    }
+
+    .results-card {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .row .label {
+      color: var(--text-muted);
+    }
+
+    .row .value {
+      font-weight: 600;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .total-price {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--success);
+      text-align: right;
+    }
+
+    .currency-sub {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--accent);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Calculadora de Impresión 3D Escalable</h1>
+    <p class="subtitle">Calcula el precio de tus piezas asegurando tu sueldo y el fondo para nuevas impresoras.</p>
+
+    <div class="grid">
+      <!-- Formulario de Configuración -->
+      <div>
+        <div class="section-title">1. Parámetros del Trabajo</div>
+
+        <div class="form-group">
+          <label for="peso">Peso del filamento (gramos):</label>
+          <input type="number" id="peso" value="30" min="0" step="1">
+        </div>
+
+        <div class="form-group">
+          <label for="tiempo">Tiempo de impresión (horas):</label>
+          <input type="number" id="tiempo" value="1" min="0" step="0.1">
+        </div>
+
+        <div class="section-title" style="margin-top: 24px;">2. Configuración del Negocio y Moneda</div>
+
+        <div class="form-group">
+          <label for="tipoCambio">Valor 1 USD en Pesos Uruguayos ($U):</label>
+          <input type="number" id="tipoCambio" value="40" min="0" step="0.1">
+        </div>
+
+        <div class="form-group">
+          <label for="precioKilo">Precio por Kilo de Filamento (USD):</label>
+          <input type="number" id="precioKilo" value="25" min="0">
+        </div>
+
+        <div class="form-group">
+          <label for="sueldoMeta">Sueldo Meta Mensual (USD):</label>
+          <input type="number" id="sueldoMeta" value="1000" min="0">
+        </div>
+
+        <div class="form-group">
+          <label for="horasMensuales">Horas de producción al mes (ej. 12h/día = 360h):</label>
+          <input type="number" id="horasMensuales" value="360" min="1">
+        </div>
+
+        <div class="form-group">
+          <label for="costoImpresora">Costo de la nueva Impresora (USD):</label>
+          <input type="number" id="costoImpresora" value="1200" min="0">
+        </div>
+
+        <div class="form-group">
+          <label for="margen">Margen Comercial (%):</label>
+          <input type="number" id="margen" value="25" min="0">
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div>
+        <div class="section-title">3. Desglose de Costos por Pieza</div>
+
+        <div class="results-card">
+          <div class="row">
+            <span class="label">Costo Filamento (+15% merma):</span>
+            <span class="value" id="resMaterial">$0.00 USD</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Cuota de Sueldo Meta:</span>
+            <span class="value" id="resSueldo">$0.00 USD</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Fondo de Expansión (Nueva Máquina):</span>
+            <span class="value" id="resExpansion">$0.00 USD</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="row">
+            <span class="label">Costo Técnico Subtotal:</span>
+            <span class="value" id="resSubtotal">$0.00 USD</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Margen Comercial (Ganancia):</span>
+            <span class="value" id="resMargen">$0.00 USD</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="total-row">
+            <div>
+              <span class="label">Precio Final Sugerido</span>
+              <div class="badge">Escalable</div>
+            </div>
+            <div>
+              <div class="total-price" id="resTotalUSD">$0.00 USD</div>
+              <div class="currency-sub" id="resTotalUYU">$U 0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+          💡 <strong>Nota:</strong> Este cálculo incluye una amortización de 3,000 horas para la compra automática de tu próxima impresora y distribuye tu sueldo meta en base a las horas trabajadas al mes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Referencias a elementos del DOM
+    const inputPeso = document.getElementById('peso');
+    const inputTiempo = document.getElementById('tiempo');
+    const inputTipoCambio = document.getElementById('tipoCambio');
+    const inputPrecioKilo = document.getElementById('precioKilo');
+    const inputSueldoMeta = document.getElementById('sueldoMeta');
+    const inputHorasMensuales = document.getElementById('horasMensuales');
+    const inputCostoImpresora = document.getElementById('costoImpresora');
+    const inputMargen = document.getElementById('margen');
+
+    const resMaterial = document.getElementById('resMaterial');
+    const resSueldo = document.getElementById('resSueldo');
+    const resExpansion = document.getElementById('resExpansion');
+    const resSubtotal = document.getElementById('resSubtotal');
+    const resMargen = document.getElementById('resMargen');
+    const resTotalUSD = document.getElementById('resTotalUSD');
+    const resTotalUYU = document.getElementById('resTotalUYU');
+
+    function calcular() {
+      // Valores de entrada
+      const pesoGramos = parseFloat(inputPeso.value) || 0;
+      const tiempoHoras = parseFloat(inputTiempo.value) || 0;
+      const tipoCambio = parseFloat(inputTipoCambio.value) || 1;
+      const precioKilo = parseFloat(inputPrecioKilo.value) || 0;
+      const sueldoMeta = parseFloat(inputSueldoMeta.value) || 0;
+      const horasMensuales = parseFloat(inputHorasMensuales.value) || 1;
+      const costoImpresora = parseFloat(inputCostoImpresora.value) || 0;
+      const margenPorcentaje = parseFloat(inputMargen.value) || 0;
+
+      // 1. Costo Material (con 15% de merma por soportes/fallos)
+      const costoPorGramo = (precioKilo / 1000) * 1.15;
+      const costoMaterialTotal = pesoGramos * costoPorGramo;
+
+      // 2. Cuota de Sueldo por hora
+      const cuotaSueldoHora = sueldoMeta / horasMensuales;
+      const costoSueldoTotal = cuotaSueldoHora * tiempoHoras;
+
+      // 3. Fondo de expansión por hora (Vida útil estimada: 3000 hs)
+      const cuotaExpansionHora = costoImpresora / 3000;
+      const costoExpansionTotal = cuotaExpansionHora * tiempoHoras;
+
+      // 4. Subtotal y Margen
+      const subtotal = costoMaterialTotal + costoSueldoTotal + costoExpansionTotal;
+      const margenMonto = subtotal * (margenPorcentaje / 100);
+      const precioFinalUSD = subtotal + margenMonto;
+      const precioFinalUYU = precioFinalUSD * tipoCambio;
+
+      // Mostrar Resultados
+      resMaterial.textContent = `$${costoMaterialTotal.toFixed(2)} USD`;
+      resSueldo.textContent = `$${costoSueldoTotal.toFixed(2)} USD`;
+      resExpansion.textContent = `$${costoExpansionTotal.toFixed(2)} USD`;
+      resSubtotal.textContent = `$${subtotal.toFixed(2)} USD`;
+      resMargen.textContent = `$${margenMonto.toFixed(2)} USD`;
+      resTotalUSD.textContent = `$${precioFinalUSD.toFixed(2)} USD`;
+      resTotalUYU.textContent = `$U ${precioFinalUYU.toFixed(2)}`;
+    }
+
+    // Escuchar eventos en los inputs
+    const inputs = [inputPeso, inputTiempo, inputTipoCambio, inputPrecioKilo, inputSueldoMeta, inputHorasMensuales, inputCostoImpresora, inputMargen];
+    inputs.forEach(input => {
+      input.addEventListener('input', calcular);
+    });
+
+    // Cálculo inicial
+    calcular();
+  </script>
+</body>
+</html>
