@@ -175,7 +175,7 @@
       <!-- Formulario de Configuración -->
       <div>
         <div class="section-title">1. Parámetros del Trabajo</div>
-
+        
         <div class="form-group">
           <label for="peso">Peso del filamento (gramos):</label>
           <input type="number" id="peso" value="30" min="0" step="1">
@@ -200,7 +200,7 @@
 
         <div class="form-group">
           <label for="sueldoMeta">Sueldo Meta Mensual (USD):</label>
-          <input type="number" id="sueldoMeta" value="1000" min="0">
+          <input type="number" id="sueldoMeta" value="500" min="0">
         </div>
 
         <div class="form-group">
@@ -210,7 +210,7 @@
 
         <div class="form-group">
           <label for="costoImpresora">Costo de la nueva Impresora (USD):</label>
-          <input type="number" id="costoImpresora" value="1200" min="0">
+          <input type="number" id="costoImpresora" value="1000" min="0">
         </div>
 
         <div class="form-group">
@@ -222,7 +222,7 @@
       <!-- Resultados -->
       <div>
         <div class="section-title">3. Desglose de Costos por Pieza</div>
-
+        
         <div class="results-card">
           <div class="row">
             <span class="label">Costo Filamento (+15% merma):</span>
@@ -266,7 +266,7 @@
         </div>
 
         <div style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-          💡 <strong>Nota:</strong> Este cálculo incluye una amortización de 3,000 horas para la compra automática de tu próxima impresora y distribuye tu sueldo meta en base a las horas trabajadas al mes.
+          💡 <strong>Nota:</strong> Este cálculo incluye una amortización de 3,000 horas para la compra automática de tu próxima impresora y distribuye tu sueldo meta en base a las horas trabajadas al mes. Tus preferencias se guardan automáticamente en este dispositivo.
         </div>
       </div>
     </div>
@@ -291,6 +291,30 @@
     const resTotalUSD = document.getElementById('resTotalUSD');
     const resTotalUYU = document.getElementById('resTotalUYU');
 
+    // Clave para localStorage
+    const STORAGE_PREFIX = 'print3d_calc_';
+
+    // Cargar valores guardados en localStorage si existen
+    const inputsConfig = [
+      { el: inputPeso, key: 'peso', default: '30' },
+      { el: inputTiempo, key: 'tiempo', default: '1' },
+      { el: inputTipoCambio, key: 'tipoCambio', default: '40' },
+      { el: inputPrecioKilo, key: 'precioKilo', default: '25' },
+      { el: inputSueldoMeta, key: 'sueldoMeta', default: '500' },
+      { el: inputHorasMensuales, key: 'horasMensuales', default: '360' },
+      { el: inputCostoImpresora, key: 'costoImpresora', default: '1000' },
+      { el: inputMargen, key: 'margen', default: '25' }
+    ];
+
+    inputsConfig.forEach(item => {
+      const savedValue = localStorage.getItem(STORAGE_PREFIX + item.key);
+      if (savedValue !== null) {
+        item.el.value = savedValue;
+      } else {
+        item.el.value = item.default;
+      }
+    });
+
     function calcular() {
       // Valores de entrada
       const pesoGramos = parseFloat(inputPeso.value) || 0;
@@ -301,6 +325,11 @@
       const horasMensuales = parseFloat(inputHorasMensuales.value) || 1;
       const costoImpresora = parseFloat(inputCostoImpresora.value) || 0;
       const margenPorcentaje = parseFloat(inputMargen.value) || 0;
+
+      // Guardar en localStorage cada vez que cambien
+      inputsConfig.forEach(item => {
+        localStorage.setItem(STORAGE_PREFIX + item.key, item.el.value);
+      });
 
       // 1. Costo Material (con 15% de merma por soportes/fallos)
       const costoPorGramo = (precioKilo / 1000) * 1.15;
@@ -331,9 +360,8 @@
     }
 
     // Escuchar eventos en los inputs
-    const inputs = [inputPeso, inputTiempo, inputTipoCambio, inputPrecioKilo, inputSueldoMeta, inputHorasMensuales, inputCostoImpresora, inputMargen];
-    inputs.forEach(input => {
-      input.addEventListener('input', calcular);
+    inputsConfig.forEach(item => {
+      item.el.addEventListener('input', calcular);
     });
 
     // Cálculo inicial
